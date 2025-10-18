@@ -7,10 +7,10 @@ Nosso objetivo é desenvolver um sistema de controle remoto para robôc3 espacia
 ## Componentes do Circuito
 - 1 × ESP32
 - 1 × Joystick analógico
-- 2 × Botões push
-- 1 × LED RGB
-- 4 × Resistores 220Ω
-- Jumpers e protoboard
+- 1 × Botão
+- 1 × LED Verde
+- 1 x LED Vermelho
+- 2 × Resistores 220Ω
 
 ## Como Rodar o Joystick
-1. Use o codigo 
+1. Use o codigo a baixo 
