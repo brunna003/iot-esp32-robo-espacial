@@ -12,5 +12,5 @@ Nosso objetivo é desenvolver um sistema de controle remoto para robôc3 espacia
 - 1 x LED Vermelho
 - 2 × Resistores 220Ω
 
-## Como Rodar o Joystick
-1. Use o codigo a baixo 
+## Codigo do Joystick no Wookwi
+
