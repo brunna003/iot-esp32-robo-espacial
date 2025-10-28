@@ -1,0 +1,83 @@
+ ## Codigo do manco de dados:
+
+# Quando for colocar pra rodar, roda o arquivo e coloca: 
+# 2 - uvicorn main:app --host 0.0.0.0 --port 8000
+# 3 - colocar no google: http://127.0.0.1:8000/leituras 
+
+
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+import sqlite3
+from datetime import datetime
+
+app = FastAPI(title="API Robô Explorador", version="1.0")
+
+# === Modelo de dados recebido pelo ESP32 ===
+class Leitura(BaseModel):
+    temperatura_c: float
+    umidade_pct: float
+    luminosidade: int
+    presenca: int
+    probabilidade_vida: float
+    timestamp: str | None = None  # opcional (o servidor pode preencher se não vier)
+
+# === Função para conectar ao banco ===
+def conectar():
+    conn = sqlite3.connect("robo_explorador.db")
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# === Cria tabela se ainda não existir ===
+def inicializar_banco():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS leituras (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+            temperatura_c REAL,
+            umidade_pct REAL,
+            luminosidade INTEGER,
+            presenca INTEGER,
+            probabilidade_vida REAL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+inicializar_banco()
+
+# === Rota principal ===
+@app.get("/")
+def home():
+    return {"status": "API do Robô Explorador ativa 🚀"}
+
+# === Endpoint para registrar leituras ===
+@app.post("/leituras")
+def registrar_leitura(dado: Leitura):
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
+
+        timestamp = dado.timestamp or datetime.utcnow().isoformat()
+
+        cursor.execute("""
+            INSERT INTO leituras (timestamp, temperatura_c, umidade_pct, luminosidade, presenca, probabilidade_vida)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (timestamp, dado.temperatura_c, dado.umidade_pct, dado.luminosidade, dado.presenca, dado.probabilidade_vida))
+
+        conn.commit()
+        conn.close()
+        return {"mensagem": "Leitura registrada com sucesso ✅"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+# === Endpoint para consultar últimas 100 leituras ===
+@app.get("/leituras")
+def listar_leituras():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM leituras ORDER BY id DESC LIMIT 100")
+    resultados = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in resultados]
