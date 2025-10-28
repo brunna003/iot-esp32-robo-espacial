@@ -15,3 +15,18 @@ Nosso objetivo é desenvolver um sistema de controle remoto para robô espacial 
 ## Rodar o Joystick no Wookwi
 * Primeiro deve-se montar o circuito no WOKWI com base nos materias mostrado anteriormete.
 * Depois basta copiar o codigo contido no arquivo sketch.ino e colar na aba de codigos dentro do WOKWI.
+
+## Componentes do robô fisico
+- 2 x Servo motores
+- 1 x Sensor de temperatura
+- 1 x Fotorrerirtor
+- 1 x Sensor de presença (PIR)
+- 1 x Led verde
+- 1 x Led vermelho
+
+  ## Como rodar o backend Python:
+  
+# Quando for colocar pra rodar, roda o arquivo e coloca: 
+# 1 - uvicorn main:app --host 0.0.0.0 --port 8000
+# 2 - colocar no google: http://127.0.0.1:8000/leituras 
+
