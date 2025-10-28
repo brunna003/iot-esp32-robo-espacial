@@ -25,8 +25,12 @@ Nosso objetivo é desenvolver um sistema de controle remoto para robô espacial 
 - 1 x Led vermelho
 
   ## Como rodar o backend Python:
+1 - Copie o codigo que se encontra em robo-lab e coloque para rodar no esp32.
+
+2 - Quando for colocar pra rodar, roda o arquivo e coloca:
+    
+* 1 - uvicorn main:app --host 0.0.0.0 --port 8000
+* 2 - colocar no google: http://127.0.0.1:8000/leituras
+
   
-# Quando for colocar pra rodar, roda o arquivo e coloca: 
-# 1 - uvicorn main:app --host 0.0.0.0 --port 8000
-# 2 - colocar no google: http://127.0.0.1:8000/leituras 
 
